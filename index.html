@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>波霸天滿宮</title>
+  <style>
+    body {
+      background-color: #ffe4e6;
+      font-family: "Arial", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+    }
+    .title {
+      font-size: 2rem;
+      color: #db2777;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+    }
+    .btn {
+      font-size: 1.25rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #ec4899;
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #db2777;
+    }
+    .result {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #be185d;
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="title">波霸天滿宮</div>
+    <button class="btn" onclick="drawPrize()" id="drawBtn">點我抽籤</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const prizes = ["大胸", "小胸", "平", "半胸"];
+    let spinning = false;
+
+    function drawPrize() {
+      if (spinning) return;
+      spinning = true;
+      document.getElementById("result").textContent = "";
+      document.getElementById("drawBtn").textContent = "抽籤中...";
+      setTimeout(() => {
+        const prize = prizes[Math.floor(Math.random() * prizes.length)];
+        document.getElementById("result").textContent = `🎉 你抽到的是：${prize}！`;
+        document.getElementById("drawBtn").textContent = "再抽一次";
+        spinning = false;
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
