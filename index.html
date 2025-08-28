@@ -42,6 +42,10 @@
     .btn:hover {
       background-color: #db2777;
     }
+    .btn:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
     .result {
       margin-top: 2rem;
       font-size: 1.5rem;
@@ -67,18 +71,40 @@
   </div>
 
   <script>
-    const prizes = ["大胸", "小胸", "平", "半胸"];
+    const prizes = ["大胸", "小胸", "平", "半胸", "全套一次擁有"];
     let spinning = false;
 
+    window.onload = () => {
+      const stored = localStorage.getItem("boob-lottery-result");
+      if (stored) {
+        document.getElementById("result").textContent = `🎉 你抽到的是：${stored}！`;
+        document.getElementById("drawBtn").disabled = true;
+        document.getElementById("drawBtn").textContent = "你已經抽過囉";
+      }
+    };
+
     function drawPrize() {
-      if (spinning) return;
+      if (spinning || localStorage.getItem("boob-lottery-result")) return;
+
       spinning = true;
       document.getElementById("result").textContent = "";
-      document.getElementById("drawBtn").textContent = "抽籤中...";
+      document.getElementById("drawBtn").textContent = "轉盤轉動中...";
+
       setTimeout(() => {
-        const prize = prizes[Math.floor(Math.random() * prizes.length)];
+        
+        const weights = [22.5, 22.5, 22.5, 22.5, 10]; // Probabilities for each prize
+        const cumulative = weights.reduce((acc, w, i) => {
+          acc.push((acc[i - 1] || 0) + w);
+          return acc;
+        }, []);
+        const rand = Math.random() * 100;
+        const prizeIndex = cumulative.findIndex(c => rand < c);
+        const prize = prizes[prizeIndex];
+    
+        localStorage.setItem("boob-lottery-result", prize);
         document.getElementById("result").textContent = `🎉 你抽到的是：${prize}！`;
-        document.getElementById("drawBtn").textContent = "再抽一次";
+        document.getElementById("drawBtn").textContent = "你已經抽過囉";
+        document.getElementById("drawBtn").disabled = true;
         spinning = false;
       }, 1200);
     }
